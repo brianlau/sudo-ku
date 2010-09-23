@@ -1,13 +1,18 @@
-//This is a test of git
 package sudoku;
+
+import java.io.*;
 
 public class App {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public static void main(String[] args)
+	{
+
+		GameGrid grid = new GameGrid();
+		System.out.println(grid.toString());
+		
 
 	}
 
