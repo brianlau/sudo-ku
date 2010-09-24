@@ -1,5 +1,7 @@
 package sudoku;
 
+import java.util.Random;
+
 public class GameGrid {
 
 	/**
@@ -7,6 +9,7 @@ public class GameGrid {
 	 * 9x9 sudoku game grid
 	 */
 	protected Integer[][] grid = new Integer[9][9];
+	protected Random r = new Random();
 	
 	public GameGrid()
 	{
@@ -14,7 +17,7 @@ public class GameGrid {
 		{
 			for (int column = 0; column < 9; column++)
 			{
-				grid[row][column] = 1;
+				grid[row][column] = r.nextInt(9) + 1;
 			}
 		}
 	}
