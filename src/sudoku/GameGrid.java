@@ -19,21 +19,26 @@ public class GameGrid {
 		}
 	}
 	
+	/**
+	 * Runs through the grid array and formats the stored values into
+	 * a 9x9 grid of numbers
+	 * 
+	 * @return The sudoku game grid as a formatted String
+	 * @see StringBuffer
+	 */
 	public String toString()
 	{
-		String output = "";
+		StringBuffer strOutput = new StringBuffer();
 		for (int row = 0; row < 9; row++)
 		{
 			for (int column = 0; column < 9; column++)
 			{
-				output = output + Integer.toString(grid[row][column]);
-				
-				
+				strOutput.append(Integer.toString(grid[row][column]));				
 			}
-			output = output + "\n";
+			strOutput.append("\n");
 		}
 		
-		return output;
+		return strOutput.toString();
 	}
 	
 }
