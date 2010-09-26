@@ -79,7 +79,7 @@ public class GameGrid {
 	}
 	
 	/**
-	 * This method taxes the x,y and value of a number that you would
+	 * This method takes the x,y and value of a number that you would
 	 * like to place into the game grid and returns whether or not it
 	 * is a valid number for that position.	 * 
 	 * 
@@ -90,19 +90,18 @@ public class GameGrid {
 	 * @param num The number to be tested.
 	 * @return True if the number works for the specified location.
 	 */
-	private Boolean validate(Integer x,Integer y,Integer num)
+	private Boolean validate(Integer col,Integer row,Integer num)
 	{
 		//Right away, the passed value is not valid if it is zero
 		if (num == 0)
 		{
-			return false;
-			
+			return false;			
 		}
 		
 		//Compare to everything in the same row
 		for (int i = 0; i < 9; i++)
 		{
-			if (grid[x][i] == num)
+			if (grid[col][i] == num)
 			{
 				return false;
 			}
@@ -111,7 +110,7 @@ public class GameGrid {
 		//Check all numbers in the same column
 		for (int i = 0; i < 9; i++)
 		{
-			if (grid[i][y] == num)
+			if (grid[i][row] == num)
 			{
 				return false;
 			}
@@ -129,15 +128,15 @@ public class GameGrid {
 		Integer rowGroup = 0;
 		
 		//Test for column group
-		if (x < 3)
+		if (col < 3)
 		{
 			colGroup = 0;
 		}
-		else if (x < 6)
+		else if (col < 6)
 		{
 			colGroup = 3;
 		}
-		else if (x < 9)
+		else if (col < 9)
 		{
 			colGroup = 6;
 		}
@@ -148,15 +147,15 @@ public class GameGrid {
 		}
 		
 		//Test for row group
-		if (y < 3)
+		if (row < 3)
 		{
 			rowGroup = 0;
 		}
-		else if (y < 6)
+		else if (row < 6)
 		{
 			rowGroup = 3;
 		}
-		else if (y < 9)
+		else if (row < 9)
 		{
 			rowGroup = 6;
 		}
@@ -170,15 +169,14 @@ public class GameGrid {
 		//for the search
 		for (int rowSearch = rowGroup; rowSearch < rowGroup + 3; rowSearch++)
 		{
-			for (int colsearch = colGroup; colsearch < colGroup + 3; colsearch++)
+			for (int colSearch = colGroup; colSearch < colGroup + 3; colSearch++)
 			{
-				if(num == grid[rowSearch][colsearch])
+				if(num == grid[colSearch][rowSearch])
 				{
 					return false;
 				}
 			}
 		}
-
 		return true;
 	}
 	
