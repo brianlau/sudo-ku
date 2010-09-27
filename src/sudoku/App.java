@@ -1,6 +1,8 @@
 package sudoku;
 
 import java.io.*;
+import jcurses.system.*;
+
 
 public class App {
 
