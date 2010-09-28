@@ -12,9 +12,8 @@ import static org.fusesource.jansi.Ansi.Color.*;
 
 public class App {
 
-	public static void main(String[] args)
-	{
-		//NOTE: target console size is 80x24
+	public static void main(String[] args) {
+		// NOTE: target console size is 80x24
 		AnsiConsole.systemInstall();
 		System.out.println(ansi().eraseScreen());
 		System.out.println(ansi().cursor(0,0));
@@ -42,7 +41,6 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 }
