@@ -45,8 +45,8 @@ public class GameGrid {
 
 				if (!valid)
 				{
-					System.out.println("Number not valid at " + "[" + column
-							+ "]" + "[" + row + 1 + "]");
+					System.out.println("Number not valid at " + "[" + Integer.toString(column + 1)
+							+ "]" + "[" + Integer.toString(row + 1) + "]");
 					grid[column][row] = 0;
 				}
 
