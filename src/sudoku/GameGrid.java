@@ -23,7 +23,7 @@ public class GameGrid {
 				Boolean valid = false;
 				for (int i = 1; i < 11; i++)
 				{
-					Integer intRandom = r.nextInt(8) + 1;
+					Integer intRandom = r.nextInt(9) + 1;
 					valid = validate(column,row,intRandom);
 					
 					if (valid)
@@ -93,7 +93,7 @@ public class GameGrid {
 		
 		for (int row = 0; row < 9; row++)
 		{
-			strOutput.append("/n");
+			strOutput.append("\n");
 			for (int column = 0; column < 9; column++)
 			{
 				strOutput.append(" ");
