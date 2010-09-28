@@ -18,12 +18,17 @@ public class App {
 		AnsiConsole.systemInstall();
 		System.out.println(ansi().eraseScreen());
 		System.out.println(ansi().cursor(0,0));
-		System.out.println( ansi().eraseScreen().bg(BLUE).render("@|white SUDO-KU -- By Team Awesome Sauce! |@"));
+		System.out.println( ansi().bg(BLUE).render("@|white SUDO-KU -- By Team Awesome Sauce!                                              |@"));
+		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
+		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
+		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
+		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
+		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
+		
 		GameGrid grid = new GameGrid();
-		System.out.println(grid.toString(true));
+		System.out.println(ansi().bg(BLACK).render(grid.toString(true)));
 		
 		//TODO: Input method
-		/*
 		try {
         ConsoleReader reader;
 		reader = new ConsoleReader();
@@ -37,7 +42,7 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 	}
 
 }

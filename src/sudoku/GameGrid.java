@@ -1,6 +1,8 @@
 package sudoku;
 
 import java.util.Random;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
 
@@ -51,7 +53,6 @@ public class GameGrid {
 				
 				if(!valid)
 				{
-					System.out.println("random fail");
 					grid[column][row] = 0;
 				}
 			}
@@ -88,12 +89,17 @@ public class GameGrid {
 		final String bgColor = "";
 		final String fgColor = "";
 		
+		AnsiConsole.systemInstall();		
+		
 		strOutput.append(ansi().bg(BLACK));
-		strOutput.append(ansi().render("@|white @|bold~~~~~~~~~~~~~~~~~~~~~~ @|"));
+		strOutput.append("@|bold ----------------------                                                         |@");
+		strOutput.append(ansi().bg(BLACK));
 		
 		for (int row = 0; row < 9; row++)
 		{
-			strOutput.append("/n");
+			strOutput.append("\n");
+			strOutput.append("@|bold |@");
+			strOutput.append(ansi().bg(BLACK));
 			for (int column = 0; column < 9; column++)
 			{
 				strOutput.append(" ");
