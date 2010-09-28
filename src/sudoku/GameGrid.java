@@ -1,6 +1,8 @@
 package sudoku;
 
 import java.util.Random;
+import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.Color.*;
 
 public class GameGrid {
 
@@ -60,22 +62,49 @@ public class GameGrid {
 	 * Runs through the grid array and formats the stored values into
 	 * a 9x9 grid of numbers
 	 * 
+	 * @param ansiFormatted Returns a formatted board if true
 	 * @return The sudoku game grid as a formatted String
 	 * @see StringBuffer
 	 */
-	public String toString()
+	public String toString(Boolean ansiFormatted)
 	{
-		StringBuffer strOutput = new StringBuffer();
-		for (int row = 0; row < 9; row++)
+		if (!ansiFormatted)
 		{
-			for (int column = 0; column < 9; column++)
+			StringBuffer strOutput = new StringBuffer();
+			for (int row = 0; row < 9; row++)
 			{
-				strOutput.append(Integer.toString(grid[row][column]));				
+				for (int column = 0; column < 9; column++)
+				{
+					strOutput.append(Integer.toString(grid[row][column]));				
+				}
+				strOutput.append("\n");
 			}
-			strOutput.append("\n");
+			
+			return strOutput.toString();
 		}
 		
+		//Generates ANSI formatted game grid
+		StringBuffer strOutput = new StringBuffer();
+		final String bgColor = "";
+		final String fgColor = "";
+		
+		strOutput.append(ansi().bg(BLACK));
+		strOutput.append(ansi().render("@|white @|bold~~~~~~~~~~~~~~~~~~~~~~ @|"));
+		
+		for (int row = 0; row < 9; row++)
+		{
+			strOutput.append("/n");
+			for (int column = 0; column < 9; column++)
+			{
+				strOutput.append(" ");
+				strOutput.append(Integer.toString(grid[row][column]));
+				strOutput.append(" ");
+			}
+		}
+				
 		return strOutput.toString();
+		
+
 	}
 	
 	/**
