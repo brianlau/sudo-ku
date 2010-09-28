@@ -16,7 +16,7 @@ public class App {
 	{
 		
 		GameGrid grid = new GameGrid();
-		System.out.println(grid.toString(false));
+		System.out.println(grid.toString(true));
 	}
 
 }

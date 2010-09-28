@@ -78,32 +78,28 @@ public class GameGrid {
 
 		// Generates ANSI formatted game grid
 		StringBuffer strOutput = new StringBuffer();
-		final String bgColor = "";
-		final String fgColor = "";
-		
 		AnsiConsole.systemInstall();		
 		
 		strOutput.append(ansi().bg(BLACK));
-		strOutput.append("@|bold ----------------------                                                         |@");
+		strOutput.append(ansi().render("@|bold |---------------------------||@"));
 		strOutput.append(ansi().bg(BLACK));
-
-			strOutput.append("\n");
-			strOutput.append("@|bold |@");
-			strOutput.append(ansi().bg(BLACK));
-
 		strOutput.append(ansi().bg(BLACK));
-		strOutput.append(ansi().render("@|white @|bold~~~~~~~~~~~~~~~~~~~~~~ @|"));
 
 		for (int row = 0; row < 9; row++)
 		{
+			
 			strOutput.append("\n");
+			strOutput.append(ansi().render("@|bold ||@"));
 			for (int column = 0; column < 9; column++)
 			{
 				strOutput.append(" ");
 				strOutput.append(Integer.toString(grid[row][column]));
 				strOutput.append(" ");
 			}
+			strOutput.append(ansi().render("@|bold ||@"));
 		}
+		strOutput.append("\n");
+		strOutput.append(ansi().render("@|bold |---------------------------||@"));
 
 		return strOutput.toString();
 
@@ -116,12 +112,9 @@ public class GameGrid {
 	 * 
 	 * @author Chadd Ingersoll <cjingers@asu.edu>
 	 * 
-	 * @param x
-	 *            The column the number will be placed in.
-	 * @param y
-	 *            The row the number will be placed in.
-	 * @param num
-	 *            The number to be tested.
+	 * @param x The column the number will be placed in.
+	 * @param y The row the number will be placed in.
+	 * @param num The number to be tested.
 	 * @return True if the number works for the specified location.
 	 */
 	private Boolean validate(Integer col, Integer row, Integer num) {
