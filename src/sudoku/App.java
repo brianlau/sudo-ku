@@ -12,35 +12,11 @@ import static org.fusesource.jansi.Ansi.Color.*;
 
 public class App {
 
-	public static void main(String[] args) {
-		// NOTE: target console size is 80x24
-		AnsiConsole.systemInstall();
-		System.out.println(ansi().eraseScreen());
-		System.out.println(ansi().cursor(0,0));
-		System.out.println( ansi().bg(BLUE).render("@|white SUDO-KU -- By Team Awesome Sauce!                                              |@"));
-		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
-		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
-		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
-		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
-		System.out.println( ansi().bg(BLACK).render("@|black                                                                                |@"));
+	public static void main(String[] args)
+	{
 		
 		GameGrid grid = new GameGrid();
-		System.out.println(ansi().bg(BLACK).render(grid.toString(true)));
-		
-		//TODO: Input method
-		try {
-        ConsoleReader reader;
-		reader = new ConsoleReader();
-        System.out.println("STA");
-        String line;
-        line = Integer.toString(reader.readVirtualKey());
-        System.out.println("STO");
-        System.out.println(line);
-        
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println(grid.toString(false));
 	}
 
 }
