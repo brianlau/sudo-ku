@@ -5,6 +5,7 @@ import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
+import static org.fusesource.jansi.Ansi.Attribute.*;
 
 public class GameGrid {
 
@@ -72,36 +73,129 @@ public class GameGrid {
 				}
 				strOutput.append("\n");
 			}
-
 			return strOutput.toString();
 		}
 
+		
+		
 		// Generates ANSI formatted game grid
 		StringBuffer strOutput = new StringBuffer();
-		AnsiConsole.systemInstall();		
+		char chrHorizontal = '\u2501';
+		char chrVertical = '\u2503';
+		char chrTbar = '\u2533';
+		char chrTinverted = '\u2533';
+		char chrCrossbar = '\u254a';
 		
-		strOutput.append(ansi().bg(BLACK));
-		strOutput.append(ansi().render("@|bold |---------------------------||@"));
-		strOutput.append(ansi().bg(BLACK));
-		strOutput.append(ansi().bg(BLACK));
-
+		for (int i = 0; i < 3; i++) {
+			strOutput.append(chrCrossbar);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+		}
+		strOutput.append(chrCrossbar);
+		
 		for (int row = 0; row < 9; row++)
 		{
-			
 			strOutput.append("\n");
-			strOutput.append(ansi().render("@|bold ||@"));
+			strOutput.append(chrVertical);
 			for (int column = 0; column < 9; column++)
 			{
 				strOutput.append(" ");
 				strOutput.append(Integer.toString(grid[row][column]));
 				strOutput.append(" ");
+				
+				//Add horizontal line to the boxes that need it
+				switch (column)
+				{
+				case 2:
+					strOutput.append(chrVertical);
+					break;
+				case 5:
+					strOutput.append(chrVertical);
+					break;
+				default:
+					break;
+				}
 			}
-			strOutput.append(ansi().render("@|bold ||@"));
-		}
-		strOutput.append("\n");
-		strOutput.append(ansi().render("@|bold |---------------------------||@"));
+			
+			if(row != 8)
+			{
+			strOutput.append(chrVertical);
+			strOutput.append("\n");
+			}
+			
+			//Horizontal bars
 
+			
+			switch (row) {
+			case 2:
+				for (int i = 0; i < 3; i++) {
+					strOutput.append(chrCrossbar);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+				}
+				strOutput.append(chrCrossbar);
+				break;
+			case 5:
+				for (int i = 0; i < 3; i++) {
+					strOutput.append(chrCrossbar);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+					strOutput.append(chrHorizontal);
+				}
+				strOutput.append(chrCrossbar);
+				break;
+			case 8:
+				strOutput.append(chrVertical);
+				break;
+			default:
+				for (int i = 0; i < 3; i++) {
+					strOutput.append(chrVertical);
+					strOutput.append("         ");
+				}
+				strOutput.append(chrVertical);
+				break;
+			}
+			
+			
+		}
+		
+		strOutput.append("\n");
+		for (int i = 0; i < 3; i++) {
+			strOutput.append(chrCrossbar);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+			strOutput.append(chrHorizontal);
+		}
+		strOutput.append(chrCrossbar);
+		
 		return strOutput.toString();
+		
 
 	}
 
