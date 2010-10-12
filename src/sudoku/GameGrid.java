@@ -1,5 +1,4 @@
 package sudoku;
-
 import java.util.Random;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -9,50 +8,209 @@ import static org.fusesource.jansi.Ansi.Attribute.*;
 
 public class GameGrid {
 
+	public int diff;
+
 	/**
 	 * A two dimensional string array that contains the 9x9 sudoku game grid
 	 */
-	protected Integer[][] grid = new Integer[9][9];
+	protected int[][] grid;
 	protected Random r = new Random();
+	private int N;
 
-	public GameGrid() {
-		for (int row = 0; row < 9; row++) {
-			for (int column = 0; column < 9; column++) {
-				// Make 10 attempts to generate a valid random number
-				Boolean valid = false;
-				for (int i = 1; i < 11; i++) {
-					Integer intRandom = r.nextInt(9) + 1;
-					valid = validate(column, row, intRandom);
+	public int[][] given;
+	public int countGiven;
 
-					if (valid)
-					{
-						grid[column][row] = intRandom;
-						i = 11;
+	private boolean[][] boxes;
+	private boolean[][] rows;
+	private boolean[][] cols;
+
+	//Gives the 3x3 box grid[i][j] is currently in.
+	private int[][] currentBox = { { 0, 0, 0, 1, 1, 1, 2, 2, 2 },
+							   	   { 0, 0, 0, 1, 1, 1, 2, 2, 2 }, 
+							   	   { 0, 0, 0, 1, 1, 1, 2, 2, 2 },
+							   	   { 3, 3, 3, 4, 4, 4, 5, 5, 5 }, 
+							   	   { 3, 3, 3, 4, 4, 4, 5, 5, 5 },
+							   	   { 3, 3, 3, 4, 4, 4, 5, 5, 5 }, 
+							   	   { 6, 6, 6, 7, 7, 7, 8, 8, 8 },
+							   	   { 6, 6, 6, 7, 7, 7, 8, 8, 8 }, 
+							   	   { 6, 6, 6, 7, 7, 7, 8, 8, 8 } };
+
+	public GameGrid(int dimension) {
+		N = dimension;
+		grid = new int[dimension][dimension];
+		given = new int[dimension][dimension];
+		boxes = new boolean[dimension][dimension];
+		rows = new boolean[dimension][dimension];
+		cols = new boolean[dimension][dimension];
+
+		diff = 0;
+
+		// Fill a grid with numbers:
+		cleanGrid();
+		create(grid, boxes, rows, cols, 0);
+
+		// Keep track of the best grid we've found:
+		int[][] best = new int[N][N];
+		int bestDifficulty = 0;
+		int bestGiven = N * N + 1;
+
+		int tries = 0;
+		// Generate 50 puzzles and pick the most difficult one
+		while (tries < 50) {
+			countGiven = 0;
+			diff = 0;
+			// Cleans the given numbers, but keeps the grid intact
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
+					given[i][j] = 0;
+				}
+			}
+
+			// Select 17 random numbers to show
+			// 17 is the absolute minimum. Any less and the puzzle is guaranteed
+			// to be unsolvable.
+			//randomGiven(17);
+			diff = solvable();
+
+			// Keep adding numbers until the puzzle is solvable
+			while (diff == 0) {
+				addRandomGiven();
+				diff = solvable();
+			}
+			if (countGiven <= bestGiven) {
+				// If this puzzle is better then anything we've found so far,
+				// store it
+				bestGiven = countGiven;
+				bestDifficulty = diff;
+				for (int i = 0; i < N; i++) {
+					for (int j = 0; j < N; j++) {
+						best[i][j] = this.given[i][j];
 					}
 				}
+				if (bestGiven < 35 && bestDifficulty > 960)
+					break;
+			}
+			tries++;
+		}
 
-				// If that fails, lets try something a bit differant
-				// It seems that the random very rarely returns 9, so we'll
-				// start there and count backwards until we get a valid number
-				if (!valid) {
-					for (int i = 9; i > 0; i--) {
-						valid = validate(column, row, i);
-						if (valid) {
-							grid[column][row] = i;
-							i = 0;
-						}
-					}
-				}
-
-				if (!valid)
-				{
-					System.out.println("Number not valid at " + "[" + Integer.toString(column + 1)
-							+ "]" + "[" + Integer.toString(row + 1) + "]");
-					grid[column][row] = 0;
-				}
-
+		// Restore the best grid:
+		countGiven = bestGiven;
+		diff = bestDifficulty;
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				this.given[i][j] = best[i][j];
 			}
 		}
+
+	}
+
+	public boolean create(int[][] grid_, boolean[][] box, boolean[][] row,
+			boolean[][] column, int level) {
+		boolean legalFound;
+		boolean emptySquare = false;
+		boolean b, r, c;
+
+		// Make sure the grid is random
+		int[] randomList = permutateList();
+
+		// For each row i 
+		for (int i = 0; i < N; i++) {
+			//   and each column j 
+			for (int j = 0; j < N; j++) {
+				if (grid_[i][j] == 0) {
+					emptySquare = true;
+					legalFound = false;
+					//   and for each value 1-9 
+					for (int k = 0; k < N; k++) {
+						b = box[currentBox[i][j]][randomList[k]];
+						r = row[i][randomList[k]];
+						c = column[j][randomList[k]];
+						//  if k is a valid value for grid[i,j] 
+						if (b && r && c) {
+							//  fill it in 
+							box[currentBox[i][j]][randomList[k]] = false;
+							row[i][randomList[k]] = false;
+							column[j][randomList[k]] = false;
+							grid_[i][j] = randomList[k] + 1;
+
+							// and try to fill the rest of the grid,
+							// recursively
+							if (create(grid_, box, row, column, level + 1)) {
+								return true;
+							}
+
+							grid_[i][j] = 0;
+							box[currentBox[i][j]][randomList[k]] = b;
+							row[i][randomList[k]] = r;
+							column[j][randomList[k]] = c;
+						}
+					}
+					if (!legalFound) {
+						return false;
+					}
+				}
+			}
+		}
+
+		if (!emptySquare) {
+			grid = grid_;
+			return true;
+		}
+		return false;
+	}
+
+	private int solvable() {
+		// returns difficulty if puzzle is solvable, or 0 otherwise
+		return new Solve().solve(N, given);
+	}
+
+	private int[] permutateList() {
+		int[] a = new int[N];
+		for (int i = 0; i < N; i++)
+			a[i] = i;
+		for (int i = 0; i < N; i++) {
+			int r = (int) (Math.random() * N);
+			int swap = a[r];
+			a[r] = a[i];
+			a[i] = swap;
+		}
+		return a;
+	}
+
+	private void cleanGrid() {
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				grid[i][j] = 0;
+				boxes[i][j] = true;
+				rows[i][j] = true;
+				cols[i][j] = true;
+				given[i][j] = 0;
+			}
+		}
+	}
+
+	private void randomGiven(int showHowMany) {
+		// Erase all given numbers, of previous tries.
+		for (int i = 0; i < this.N; i++) {
+			for (int j = 0; j < this.N; j++) {
+				given[i][j] = 0;
+			}
+		}
+		while (countGiven < showHowMany)
+			addRandomGiven();
+	}
+
+	private void addRandomGiven() {
+		int i = (int) (Math.random() * this.N);
+		int j = (int) (Math.random() * this.N);
+		while (this.given[i][j] != 0) {
+			i = (int) (Math.random() * this.N);
+			j = (int) (Math.random() * this.N);
+		}
+
+		given[i][j] = grid[i][j];
+		countGiven++;
+
 	}
 
 	/**
@@ -76,18 +234,29 @@ public class GameGrid {
 			return strOutput.toString();
 		}
 
-		
-		
+
+
 		// Generates ANSI formatted game grid
+		//http://en.wikipedia.org/wiki/Box-drawing_characters
 		StringBuffer strOutput = new StringBuffer();
 		char chrHorizontal = '\u2501';
 		char chrVertical = '\u2503';
 		char chrTbar = '\u2533';
-		char chrTinverted = '\u2533';
+		char chrTinverted = '\u2537';
+		char chrTleft = '\u2523';
+		char chrTright = '\u252a';
 		char chrCrossbar = '\u254a';
-		
+
+		//corner characters
+		char chrULcorner = '\u250f';
+		char chrURcorner = '\u2513';
+		char chrLLcorner = '\u2517';
+		char chrLRcorner = '\u251b';
+
+		//Print the top row
+		strOutput.append(chrULcorner);
+
 		for (int i = 0; i < 3; i++) {
-			strOutput.append(chrCrossbar);
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
@@ -97,9 +266,13 @@ public class GameGrid {
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
+			if(i != 2)
+			{
+				strOutput.append(chrTbar);
+			}
 		}
-		strOutput.append(chrCrossbar);
-		
+		strOutput.append(chrURcorner);
+
 		for (int row = 0; row < 9; row++)
 		{
 			strOutput.append("\n");
@@ -109,7 +282,7 @@ public class GameGrid {
 				strOutput.append(" ");
 				strOutput.append(Integer.toString(grid[row][column]));
 				strOutput.append(" ");
-				
+
 				//Add horizontal line to the boxes that need it
 				switch (column)
 				{
@@ -123,20 +296,24 @@ public class GameGrid {
 					break;
 				}
 			}
-			
+
 			if(row != 8)
 			{
 			strOutput.append(chrVertical);
 			strOutput.append("\n");
 			}
-			
+
 			//Horizontal bars
 
-			
+
 			switch (row) {
 			case 2:
+				strOutput.append(chrTleft);
 				for (int i = 0; i < 3; i++) {
-					strOutput.append(chrCrossbar);
+					if(i != 0)
+					{
+						strOutput.append(chrCrossbar);
+					}
 					strOutput.append(chrHorizontal);
 					strOutput.append(chrHorizontal);
 					strOutput.append(chrHorizontal);
@@ -147,11 +324,15 @@ public class GameGrid {
 					strOutput.append(chrHorizontal);
 					strOutput.append(chrHorizontal);
 				}
-				strOutput.append(chrCrossbar);
+				strOutput.append(chrTright);
 				break;
 			case 5:
+				strOutput.append(chrTleft);
 				for (int i = 0; i < 3; i++) {
-					strOutput.append(chrCrossbar);
+					if(i != 0)
+					{
+						strOutput.append(chrCrossbar);
+					}
 					strOutput.append(chrHorizontal);
 					strOutput.append(chrHorizontal);
 					strOutput.append(chrHorizontal);
@@ -162,7 +343,7 @@ public class GameGrid {
 					strOutput.append(chrHorizontal);
 					strOutput.append(chrHorizontal);
 				}
-				strOutput.append(chrCrossbar);
+				strOutput.append(chrTright);
 				break;
 			case 8:
 				strOutput.append(chrVertical);
@@ -175,13 +356,15 @@ public class GameGrid {
 				strOutput.append(chrVertical);
 				break;
 			}
-			
-			
+
+
 		}
-		
+
+		//Print the bottom row
 		strOutput.append("\n");
+		strOutput.append(chrLLcorner);
+
 		for (int i = 0; i < 3; i++) {
-			strOutput.append(chrCrossbar);
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
@@ -191,90 +374,13 @@ public class GameGrid {
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
+			if(i != 2)
+			{
+				strOutput.append(chrTinverted);
+			}
 		}
-		strOutput.append(chrCrossbar);
-		
+		strOutput.append(chrLRcorner);
 		return strOutput.toString();
-		
-
-	}
-
-	/**
-	 * This method takes the x,y and value of a number that you would like to
-	 * place into the game grid and returns whether or not it is a valid number
-	 * for that position. *
-	 * 
-	 * @author Chadd Ingersoll <cjingers@asu.edu>
-	 * 
-	 * @param x The column the number will be placed in.
-	 * @param y The row the number will be placed in.
-	 * @param num The number to be tested.
-	 * @return True if the number works for the specified location.
-	 */
-	private Boolean validate(Integer col, Integer row, Integer num) {
-		// Right away, the passed value is not valid if it is zero
-		if (num == 0) {
-			return false;
-		}
-
-		// Compare to everything in the same row
-		for (int i = 0; i < 9; i++) {
-			if (grid[col][i] == num) {
-				return false;
-			}
-		}
-
-		// Check all numbers in the same column
-		for (int i = 0; i < 9; i++) {
-			if (grid[i][row] == num) {
-				return false;
-			}
-		}
-
-		/*
-		 * Determine which group the number is going to be placed inand test all
-		 * the numbers in that group against the given number
-		 */
-
-		// Determine group
-		Integer group = 0;
-		Integer colGroup = 0;
-		Integer rowGroup = 0;
-
-		// Test for column group
-		if (col < 3) {
-			colGroup = 0;
-		} else if (col < 6) {
-			colGroup = 3;
-		} else if (col < 9) {
-			colGroup = 6;
-		} else {
-			// The value must be out of range or something
-			return false;
-		}
-
-		// Test for row group
-		if (row < 3) {
-			rowGroup = 0;
-		} else if (row < 6) {
-			rowGroup = 3;
-		} else if (row < 9) {
-			rowGroup = 6;
-		} else {
-			// The value must be out of range or something
-			return false;
-		}
-
-		// now we have to put all this information together
-		// for the search
-		for (int rowSearch = rowGroup; rowSearch < rowGroup + 3; rowSearch++) {
-			for (int colSearch = colGroup; colSearch < colGroup + 3; colSearch++) {
-				if (num == grid[colSearch][rowSearch]) {
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 
 }

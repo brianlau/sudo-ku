@@ -10,7 +10,7 @@ public class App {
 	public static void main(String[] args)
 	{
 		//AnsiConsole.systemInstall();
-		GameGrid grid = new GameGrid();
+		GameGrid grid = new GameGrid(9);
 		System.out.println(grid.toString(true));
 		
 		
