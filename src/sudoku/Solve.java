@@ -1,4 +1,5 @@
 package sudoku;
+
 /**
  * 
  * @author Brian Lau
@@ -61,7 +62,7 @@ public class Solve {
 				for (int j = 0; j < dimension; j++) {
 					if (!checked[i][j]) {
 						int[] poss = L.countCandidates(i, j); // poss[0] =
-																// number of
+						// number of
 						// candidates, poss[1]
 						// = one of those
 						// candidates
@@ -171,6 +172,15 @@ public class Solve {
 			return 0;
 	}
 
+	/**
+	 * Method returns the 3x3 box that the space currently occupies.
+	 * 
+	 * @param i
+	 *            A particular row
+	 * @param j
+	 *            A particular column
+	 * @return The 3x3 box the space is in
+	 */
 	public static int[] rc2box(int i, int j) {
 		int[] r = { 6, 6 };
 		if (i < 6) {
@@ -191,8 +201,11 @@ public class Solve {
 	 * and the grid are updated.
 	 * 
 	 * @param i
+	 *            The row that is being checked
 	 * @param j
+	 *            The column being checked
 	 * @param K
+	 *            The number that grid[i][j] will have
 	 */
 	private void fillSquare(int i, int j, int K) {
 		// Eliminates candidate K from row, column and box:
