@@ -20,6 +20,10 @@ public class GameGrid {
 
 	public int[][] given;
 	public int countGiven;
+	
+	//Remembers which numer is selected
+	Integer selectedColumn = 0;
+	Integer selectedRow = 0;
 
 	private boolean[][] boxes;
 	private boolean[][] rows;
@@ -109,6 +113,26 @@ public class GameGrid {
 
 	}
 
+	/**
+	 * Changes the specified number in the "givens" array
+	 * @param x The column position of the number
+	 * @param y The row position of the number
+	 * @param number The number to be inserted into the array
+	 */
+	public void setNumber(Integer x, Integer y, Integer number)
+	{
+		given[x][y] = number;
+	}
+	
+	/**
+	 * Sets the currently selected number
+	 * @param number The number to set to
+	 */
+	public void setNumber(Integer number)
+	{
+		given[selectedRow][selectedColumn] = number;
+	}
+	
 	/**
 	 * Method attempts to create a solvable grid
 	 * 
@@ -262,15 +286,17 @@ public class GameGrid {
 			StringBuffer strOutput = new StringBuffer();
 			for (int row = 0; row < 9; row++) {
 				for (int column = 0; column < 9; column++) {
-					strOutput.append(Integer.toString(grid[row][column]));
+					strOutput.append(Integer.toString(given[row][column]));
 				}
 				strOutput.append("\n");
 			}
 			return strOutput.toString();
 		}
 
+
+
 		// Generates ANSI formatted game grid
-		// http://en.wikipedia.org/wiki/Box-drawing_characters
+		//http://en.wikipedia.org/wiki/Box-drawing_characters
 		StringBuffer strOutput = new StringBuffer();
 		char chrHorizontal = '\u2501';
 		char chrVertical = '\u2503';
@@ -280,13 +306,13 @@ public class GameGrid {
 		char chrTright = '\u252a';
 		char chrCrossbar = '\u254a';
 
-		// corner characters
+		//corner characters
 		char chrULcorner = '\u250f';
 		char chrURcorner = '\u2513';
 		char chrLLcorner = '\u2517';
 		char chrLRcorner = '\u251b';
 
-		// Print the top row
+		//Print the top row
 		strOutput.append(chrULcorner);
 
 		for (int i = 0; i < 3; i++) {
@@ -299,22 +325,50 @@ public class GameGrid {
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
-			if (i != 2) {
+			if(i != 2)
+			{
 				strOutput.append(chrTbar);
 			}
 		}
 		strOutput.append(chrURcorner);
 
-		for (int row = 0; row < 9; row++) {
+		for (int row = 0; row < 9; row++)
+		{
 			strOutput.append("\n");
 			strOutput.append(chrVertical);
-			for (int column = 0; column < 9; column++) {
-				strOutput.append(" ");
-				strOutput.append(Integer.toString(grid[row][column]));
-				strOutput.append(" ");
+			for (int column = 0; column < 9; column++)
+			{
+				if((row==selectedRow)&&(column==selectedColumn))
+				{
+					strOutput.append(">");
+				}
+				else
+				{
+					strOutput.append(" ");
+				}
+				
+				//Insert a blank space if the number is zero
+				if(given[row][column]==0)
+				{
+					strOutput.append(" ");
+				}
+				else
+				{
+					strOutput.append(Integer.toString(given[row][column]));
+				}
+								
+				if((row==selectedRow)&&(column==selectedColumn))
+				{
+					strOutput.append("<");
+				}
+				else
+				{
+					strOutput.append(" ");
+				}
 
-				// Add horizontal line to the boxes that need it
-				switch (column) {
+				//Add horizontal line to the boxes that need it
+				switch (column)
+				{
 				case 2:
 					strOutput.append(chrVertical);
 					break;
@@ -326,18 +380,21 @@ public class GameGrid {
 				}
 			}
 
-			if (row != 8) {
-				strOutput.append(chrVertical);
-				strOutput.append("\n");
+			if(row != 8)
+			{
+			strOutput.append(chrVertical);
+			strOutput.append("\n");
 			}
 
-			// Horizontal bars
+			//Horizontal bars
+
 
 			switch (row) {
 			case 2:
 				strOutput.append(chrTleft);
 				for (int i = 0; i < 3; i++) {
-					if (i != 0) {
+					if(i != 0)
+					{
 						strOutput.append(chrCrossbar);
 					}
 					strOutput.append(chrHorizontal);
@@ -355,7 +412,8 @@ public class GameGrid {
 			case 5:
 				strOutput.append(chrTleft);
 				for (int i = 0; i < 3; i++) {
-					if (i != 0) {
+					if(i != 0)
+					{
 						strOutput.append(chrCrossbar);
 					}
 					strOutput.append(chrHorizontal);
@@ -382,9 +440,10 @@ public class GameGrid {
 				break;
 			}
 
+
 		}
 
-		// Print the bottom row
+		//Print the bottom row
 		strOutput.append("\n");
 		strOutput.append(chrLLcorner);
 
@@ -398,12 +457,13 @@ public class GameGrid {
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
 			strOutput.append(chrHorizontal);
-			if (i != 2) {
+			if(i != 2)
+			{
 				strOutput.append(chrTinverted);
 			}
 		}
 		strOutput.append(chrLRcorner);
 		return strOutput.toString();
 	}
-
+	
 }
