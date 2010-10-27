@@ -1,11 +1,6 @@
 package sudoku;
 
 import java.util.Random;
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
-import static org.fusesource.jansi.Ansi.*;
-import static org.fusesource.jansi.Ansi.Color.*;
-import static org.fusesource.jansi.Ansi.Attribute.*;
 
 public class GameGrid {
 

@@ -2,7 +2,6 @@ package sudoku;
 
 //import java.io.*;
 import java.io.IOException;
-import jline.ANSIBuffer;
 import jline.ConsoleReader;
 
 public class App {
