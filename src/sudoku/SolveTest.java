@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class SolveTest2 {
+public class SolveTest {
 //In order to use Solve.java, the grid to test must have at least one zero
 //else it will just return the difficulty, which default is one.
 	
