@@ -461,4 +461,15 @@ public class GameGrid {
 		return strOutput.toString();
 	}
 	
+	public void gridCopy()
+	{
+		for (int x = 0; x < 9; x++)
+		{
+			for (int y = 0; y < 9; y++)
+			{
+				given[x][y] = grid[x][y];
+			}
+		}
+	}
+	
 }

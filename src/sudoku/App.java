@@ -16,17 +16,19 @@ public class App {
 		//I decided to hard-code it into the file, because with everyone on
 		//differant OS's, it would be a pain right now to read from a file.
 		//TARGET CONSOLE SIZE IS 80x24
+		System.out.println("\n\n\n");
 		System.out.println("                            SUDO-KU                             ");
 		System.out.println("                        ---------------                         ");
 		System.out.println("                     By Team Awesome Sauce                      ");
 		System.out.println("                         -Chadd Ingersoll                       ");
-		System.out.println("                         -Brian Lou                             ");
+		System.out.println("                         -Brian Lau                             ");
 		System.out.println("                         -Walter Trask                          ");
 		System.out.println("                         -Alvin Muradi                          ");
 		System.out.println("                        ---------------                         ");
 		System.out.println("     Use the arrow keys to move around the grid and use the     ");
 		System.out.println("     number keys to enter numbers in the game grid.             ");
 		System.out.println("                        ---------------                         ");
+		System.out.println("\n\n\n\n\n\n\n");
 		System.out.println("Please press the Enter key to begin...                          ");
 		
 		//Wait for the user to hit any key before entering the game loop
@@ -152,7 +154,22 @@ public class App {
 					System.out.println("Thanks for playing!");
 					bolRunning = false;
 					break;
+				case 114: //r key
+					//generate a new game board
+					grid = new GameGrid(9);
+					break;
+				case 82: //R key
+					//generate a new game board
+					grid = new GameGrid(9);
+					break;
+				case 115: //s key
+					grid.gridCopy();
+					break;
+				case 83: //S key
+					grid.gridCopy();
+					break;
 				default:
+					//Do nothing for keys we don't care about
 					break;
 				}
 		        
@@ -162,32 +179,6 @@ public class App {
 		}
 		
 		} while (bolRunning);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//AnsiConsole.systemInstall();
-		
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//TODO: Input method
-		/*
-
-*/
 		
 		}
 		
