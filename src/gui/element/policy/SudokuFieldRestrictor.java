@@ -14,20 +14,29 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 @SuppressWarnings("serial")
-public class SudokuFieldLimiter extends PlainDocument {
+public class SudokuFieldRestrictor extends PlainDocument {
 	
 	private int max = 1;
     
-	public SudokuFieldLimiter() {
+	public SudokuFieldRestrictor() {
         super();
     }
 	
     @Override
 	public void insertString(int offset, String  str, AttributeSet attr) throws BadLocationException {
-        if (str == null) return;
         
-        if ((getLength() + str.length()) <= this.max) {
-            super.insertString(offset, str, attr);
-        }
+//    	try {
+	    	if(str == null || !(49<=str.charAt(0) && str.charAt(0)<=57) ) {
+	    		return;
+//	        	throw new RestrictionError();
+	        } else {
+		        if ((getLength() + str.length()) <= this.max) {
+		            	super.insertString(offset, str, attr);
+		        }
+	        }
+//    	} catch(RestrictionError error) {
+//    		
+//    	}
+    	
     }
 }

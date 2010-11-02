@@ -30,7 +30,7 @@ public abstract class Cell extends JTextField {
 		this.setFont(font);
 		
 		//adjust common cell attributes
-		this.setDocument(new SudokuFieldLimiter());
+		this.setDocument(new SudokuFieldRestrictor());
 		this.setBackground(Color.white);
 		this.setHorizontalAlignment(JTextField.CENTER);
 		this.setBackground(Color.white);

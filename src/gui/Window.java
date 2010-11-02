@@ -15,13 +15,16 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Window extends JFrame {
 	
+	public static Grid grid;
+//	public static Status status;
+	
 	/**
 	 * @param title The title of the Window or application.
 	 * @param data The randomized set of numbers to use for populating the board grid.
 	 */
 	public Window(String title, int[][] data) {
 		
-		Grid grid = new Grid(data);
+		grid = new Grid(data);
 		
 		this.setTitle(title);
 	    this.setResizable(false);
