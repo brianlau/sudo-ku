@@ -12,7 +12,7 @@ package gui.element;
 import java.awt.*;
 import javax.swing.*;
 
-import gui.element.policies.*;
+import gui.element.policy.*;
 
 @SuppressWarnings("serial")
 public abstract class Cell extends JTextField {
@@ -30,7 +30,7 @@ public abstract class Cell extends JTextField {
 		this.setFont(font);
 		
 		//adjust common cell attributes
-		this.setDocument(new CellPolicy(1));
+		this.setDocument(new SudokuField());
 		this.setBackground(Color.white);
 		this.setHorizontalAlignment(JTextField.CENTER);
 		this.setBackground(Color.white);

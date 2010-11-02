@@ -1,7 +1,7 @@
-package gui.element.policies;
+package gui.element.policy;
 
 /**
- * This class retains and sets the policies for an editable document object 
+ * This class retains and sets the policies for an editable field 
  * such as a cell for the Sudoku game.
  * 
  * @author Alvin Moradi with contributions from the "AWESOME SAUCE" team
@@ -14,13 +14,12 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 @SuppressWarnings("serial")
-public class CellPolicy extends PlainDocument {
+public class SudokuField extends PlainDocument {
 	
-	private int max;
+	private int max = 1;
     
-	public CellPolicy(int limit) {
+	public SudokuField() {
         super();
-        this.max = limit;
     }
 	
     @Override
