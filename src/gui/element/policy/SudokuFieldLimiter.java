@@ -14,11 +14,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 @SuppressWarnings("serial")
-public class SudokuField extends PlainDocument {
+public class SudokuFieldLimiter extends PlainDocument {
 	
 	private int max = 1;
     
-	public SudokuField() {
+	public SudokuFieldLimiter() {
         super();
     }
 	
