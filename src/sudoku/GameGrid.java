@@ -95,9 +95,11 @@ public class GameGrid {
 			hardDiff = solvableHard();
 
 			// Keep adding numbers until the puzzle is solvable
-			while (diff == 0) {
+			while (diff == 0 || normDiff == 0 || hardDiff == 0) {
 				addRandomGiven();
 				diff = solvable();
+				normDiff = solvableNormal();
+				hardDiff = solvableHard();
 			}
 			if (diff <= 500) {
 				// If this puzzle is better then anything we've found so far,
@@ -110,7 +112,7 @@ public class GameGrid {
 					}
 				}
 			}
-			if (normDiff <= 800) {
+			if (normDiff <= 1000) {
 				bestNormalGiven = countGiven;
 				bestDifficulty = normDiff;
 				for (int i = 0; i < N; i++) {
