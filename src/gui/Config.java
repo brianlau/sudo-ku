@@ -13,16 +13,16 @@ public class Config {
 
 	public static final String NAME = "CST-Sudoku";
     public static final String TITLE = "SUDOKU: By Team Awesome Sauce";
-    public static final String VERSION = "SUDOKU: By Team Awesome Sauce";
+    public static final String VERSION = "Snow Lemer";
     
     public static final String ABOUT = 
         "<HTML>" + 
-        "<B>"+NAME+"</B> ver. "+VERSION+"</BR>" + 
-        "<P><BR>Author: <FONT COLOR=\"#0000ff\">Samantha Yen</FONT></P>" + 
-        "<P><BR>Web page: <FONT COLOR=\"#0000ff\">http://playsudoku.sourceforge.net</FONT></P>" +
-        "<P><BR></P>This program is released under the GNU General Public License.<BR> " +
+        "<B>"+NAME+"</B> "+VERSION+"</BR>" + 
+        "<P><BR>Author: <FONT COLOR=\"#0000ff\">Team Awesome Sauce</FONT></P>" + 
+        "<P><BR>Web page: <FONT COLOR=\"#0000ff\">http://www.saucyteams.com/cst200goofs.php?nerdlevel=10</FONT></P>" +
+        "<P><BR></P>Blooper's License.<BR> " +
         "A copy of this is included with your copy of "+NAME+" and can also be found at<BR> " +
-        "<FONT COLOR=\"#0000ff\">http://www.opensource.org/licenses/gpl-license.php</FONT>" + 
+        "<FONT COLOR=\"#0000ff\">http://www.opensource.org/licenses/non-existant.php</FONT>" + 
         "</HTML>";
 
     public static final Color CELL_FONT_COLOR_BASE = new Color(0,0,0);    
@@ -41,9 +41,9 @@ public class Config {
     public final static Border EMPTY_B = BorderFactory.createEmptyBorder(); 
     public final static Border RAISED_B = BorderFactory.createBevelBorder(BevelBorder.RAISED);
     public final static Border LOWERED_B = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
+    public final static Border ETCHED_B = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
     
-    public final static int DIFF_EASY = 34;
-    public final static int DIFF_NORMAL = 30;
-    public static final int DIFF_HARD = 26;
+    public static boolean DYNAMIC_CORRECTION = true; 
+    public static boolean DYNAMIC_HIGHLIGHT = true; 
     
 }

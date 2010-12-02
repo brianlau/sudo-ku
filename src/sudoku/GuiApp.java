@@ -10,7 +10,9 @@ package sudoku;
 
 import gui.Config;
 import gui.Window;
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class GuiApp {
 	
@@ -21,14 +23,39 @@ public class GuiApp {
 	private static void createAndShowGUI() {
         //Calculate a random grid
 		GameGrid numbers = new GameGrid(9);
+		int[][] matrix = new int[9][9];
+			
+		String str = JOptionPane.showInputDialog(null, "Please enter difficulty level [retard,cool,avengers]", "The MONSTEROUS input box... yours truly :^)", 1);
+				
+		switch(str.charAt(0)) {
+			case 'a':
+				Config.DYNAMIC_HIGHLIGHT = false;
+				Config.DYNAMIC_CORRECTION = false;
+				
+				matrix = numbers.given;
+				break;
+			case 'c':
+				Config.DYNAMIC_HIGHLIGHT = true;
+				Config.DYNAMIC_CORRECTION = false;
+				
+				matrix = numbers.normalGiven;
+				break;
+			default:
+				Config.DYNAMIC_HIGHLIGHT = true;
+				Config.DYNAMIC_CORRECTION = true;
+				
+				matrix = numbers.hardGiven;
+				break;
+		}
 		
 		//Create and set up the window.
-        Window window = new Window(Config.TITLE, numbers.grid, numbers.given);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Window display = new Window(Config.TITLE, numbers.grid, matrix);
+        display.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Display the window.
-        window.pack();
-        window.setVisible(true);
+        display.pack();
+        display.setVisible(true);        
+        
 	}	
 	
     /**

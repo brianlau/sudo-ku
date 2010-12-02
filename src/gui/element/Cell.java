@@ -10,10 +10,9 @@ package gui.element;
  */
 
 import java.awt.*;
-
 import javax.swing.*;
 import gui.Config;
-import gui.element.policy.*;
+import gui.element.policy.CellObserver;
 
 @SuppressWarnings("serial")
 public abstract class Cell extends JTextField {
@@ -42,7 +41,7 @@ public abstract class Cell extends JTextField {
 	}
 	
 	public void setCorrect(boolean flag) {
-		setForeground(flag? Config.CELL_FONT_COLOR_CORRECT: Config.CELL_FONT_COLOR_INCORRECT);
+		if(editable) setForeground(flag? Config.CELL_FONT_COLOR_CORRECT: Config.CELL_FONT_COLOR_INCORRECT);
 	}
 		
 	public void setHighlighted(boolean flag) {
@@ -77,7 +76,11 @@ public abstract class Cell extends JTextField {
 		return getText().length() > 0? Integer.parseInt(getText()): 0;
 	}
 	
-	public String toString() {
-		return "[" + gridx + "," + gridy + "]";
+	public void reset() {		
+		if(editable) setValue(0);
+	}
+	
+	public void clear() {		
+		setValue(0);		
 	}
 }

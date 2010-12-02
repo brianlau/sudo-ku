@@ -25,18 +25,12 @@ public class CellObserver extends PlainDocument {
     @Override
 	public void insertString(int offset, String  str, AttributeSet attr) throws BadLocationException {
         
-//    	try {
-	    	if(str == null || !(49<=str.charAt(0) && str.charAt(0)<=57 && str.charAt(0)!='0') ) {
-	    		return;
-//	        	throw new RestrictionError();
-	        } else {
-		        if ((getLength() + str.length()) <= this.MAX_FIELD_LENGTH) {
-		            	super.insertString(offset, str, attr);
-		        } 
-	        }
-//    	} catch(RestrictionError error) {
-//    		
-//    	}
-    	
+    	if(str == null || !(49<=str.charAt(0) && str.charAt(0)<=57 && str.charAt(0)!='0') ) {
+    		return;
+        } else {
+	        if ((getLength() + str.length()) <= this.MAX_FIELD_LENGTH) {
+	            	super.insertString(offset, str, attr);
+	        } 
+        }    	
     }
 }

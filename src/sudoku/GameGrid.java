@@ -10,7 +10,7 @@ public class GameGrid {
 	/**
 	 * A two dimensional string array that contains the 9x9 sudoku game grid
 	 */
-	protected int[][] grid;
+	public int[][] grid;
 	protected Random r = new Random();
 	private int N;
 
