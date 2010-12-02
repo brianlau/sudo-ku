@@ -11,23 +11,33 @@ package gui;
 
 import java.awt.*;
 import javax.swing.*;
-
-import gui.element.*;
+import java.awt.event.*;
+import gui.element.Box;
+import gui.element.Cell;
+import gui.element.Line;
+//import gui.element.Cross;
+import gui.element.EditableCell;
+import gui.element.StaticCell;
 
 @SuppressWarnings("serial")
-public class Grid extends JPanel {
+public class Grid extends JPanel implements FocusListener {
 
-	JButton button;
-	Cell[][] cells;
-	int[][] values;
+	private Box[][] boxes;
+	private Cell[][] cells;
+	private Line[][] lines;
+	private int[][] allNumbers, assistedNumbers;
 	
 	/**
 	 * The constructor for calling this grid class.
 	 * 
-	 * @param values A set of numbers for use with the creation of the Sudoku grid.
+	 * @param assistedNumbers A set of numbers for use with the creation of the Sudoku grid.
 	 */
-	public Grid(int[][] values) {
-		this.values = values;
+	public Grid(int[][] allNumbers, int[][] assistedNumbers) {
+		this.allNumbers 	= allNumbers;
+		this.assistedNumbers= assistedNumbers;
+		this.cells 			= new Cell[9][9];
+		this.boxes			= new Box[3][3];
+		this.lines			= new Line[2][9];
 		
 		initComponent();
 	}
@@ -35,44 +45,85 @@ public class Grid extends JPanel {
 	/**
 	 * Initiate all of the components required for drafting a proper Sudoku board.
 	 */
-	public void initComponent() {
+	public void initComponent() {	
 		
-		GridBagConstraints c = new GridBagConstraints();
-		GridLayout layout = new GridLayout(9,9);
-		cells = new Cell[9][9];
-		layout.setHgap(0);
-		layout.setVgap(0);
-
-		this.setBackground(Color.LIGHT_GRAY);		
-		this.setPreferredSize(new Dimension(900,900));
-        this.setLayout(layout);
-        
-        for (int i = 0; i < 9; i++) {
-        	for (int j = 0; j < 9; j++) {    		
-	        	cells[i][j] = values[i][j] == 0? new EditableCell(i,j): new StaticCell(i,j,values[i][j]);
-	        	this.add(cells[i][j], c);				
-			}
-		}
+		this.add(getGrid());
+        this.add(getConfig());
 	}
-        
-	/* (non-Javadoc)
-	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
-	 */
-	@Override
-	public void paintComponent(Graphics g) {	  
+	
+	public JPanel getGrid() {
+		int bx=-1, by=-1, lx=0, ly=0;
 		
-		//parent component must always be called.
-		super.paintComponent(g);
-		//casting so that swing packages can be utilized as well.
-		Graphics2D g2 = (Graphics2D)g;
+		JPanel panel  		= new JPanel();		
+		GridBagConstraints c= new GridBagConstraints();
+		GridLayout layout 	= new GridLayout(9,9);
+				
+		panel.setPreferredSize(new Dimension(540,540));
+		panel.setBorder(Config.EMPTY_B);
+        panel.setLayout(layout);
 		
-		g2.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(7));
-		g2.drawLine(10,291,890,291);
-		g2.drawLine(10,582,890,582);
-		g2.drawLine(300,10,300,862);
-		g2.drawLine(600,10,600,862);
+        for (int x = 0; x < 9; x++) {   
+        	
+        	if(x%3 == 0) bx++;
+        	
+        	if(lines[0][x] == null) 
+        		lines[0][x] = new Line(false);
+        	
+        	by = -1;
+        	
+        	for (int y = 0; y < 9; y++) {  
+	        	if(y%3 == 0) by++;   
+	        		        
+	        	if(boxes[bx][by] == null) 
+	        		boxes[bx][by] = new Box( (bx+by) % 2 == 0 );
+	        	
+	        	if(lines[1][y] == null) 
+	        		lines[1][y] = new Line(false);
+        		        	
+	        	cells[x][y] = assistedNumbers[x][y] == 0? 
+	        			new EditableCell(x,y, boxes[bx][by], new Line[]{lines[0][x], lines[1][y]}) : 
+	        			new StaticCell(x,y,assistedNumbers[x][y], boxes[bx][by], new Line[]{lines[0][x], lines[1][y]});	   
+	        	
 
-		g2.setStroke(new BasicStroke(1));
-    }
+//	    	    System.out.println(0 + ":" + x + " & " + 1 + ":" + y);
+	        			
+	        	cells[x][y].addFocusListener(this);
+	    	        	
+	        	boxes[bx][by].add(cells[x][y]);
+	        	lines[0][x].add(cells[x][y]);
+	        	lines[1][y].add(cells[x][y]);
+	        	
+	        	panel.add(cells[x][y], c);
+			}
+        	System.out.println("------");
+		}
+        
+		return panel;
+	}
+	
+	public JPanel getConfig() {
+		JPanel panel = new JPanel();		
+		
+		panel.setPreferredSize(new Dimension(260,540));
+		panel.setBackground(Color.lightGray);
+		panel.setBorder(Config.EMPTY_B);
+		
+		return panel;
+	}
+	
+	public void focusGained(FocusEvent fe) {	
+		EditableCell cell = ((EditableCell)fe.getSource());
+
+		cell.setValue(0);
+		cell.setSelected(true);
+		cell.setHighlightedDynamics(true);
+	}
+	
+	public void focusLost(FocusEvent fe) {	
+		EditableCell cell = ((EditableCell)fe.getSource());
+
+		cell.setSelected(false);
+		cell.setHighlightedDynamics(false);
+		cell.setCorrect(cell.getValue() == allNumbers[cell.getLocation('x')][cell.getLocation('y')]);		
+	}
 }

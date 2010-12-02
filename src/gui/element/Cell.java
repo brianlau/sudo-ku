@@ -10,56 +10,74 @@ package gui.element;
  */
 
 import java.awt.*;
-import javax.swing.*;
 
+import javax.swing.*;
+import gui.Config;
 import gui.element.policy.*;
 
 @SuppressWarnings("serial")
 public abstract class Cell extends JTextField {
 	
-	protected int gridx;
-	protected int gridy;
-	protected int value;
+	protected Color color, bgColor;
+	protected int gridx, gridy;
+	protected boolean editable, focusable;
+	protected Box parentBox;
+	protected Line parentLines[];
 	
-	protected Color color;
-	protected boolean editable;
-	
-	protected void initElement() {
-		//set cell font
-		Font font = new Font("Verdana", Font.PLAIN, 60);
-		this.setFont(font);
+	public void initElement() {
+		bgColor = parentBox.isShaded()? Config.CELL_SHADED_COLOR: Config.CELL_REGULAR_COLOR;
 		
 		//adjust common cell attributes
-		this.setDocument(new SudokuFieldRestrictor());
-		this.setBackground(Color.white);
+		this.setDocument(new CellObserver());
 		this.setHorizontalAlignment(JTextField.CENTER);
-		this.setBackground(Color.white);
+		this.setFont(Config.FONT_BIG);
 		
-		//adjust unique cell attributes
+		//adjust dynamic cell attributes
+		this.setFocusable(focusable);
+		this.setForeground(color);
 		this.setEditable(editable);
-		this.setForeground(color);	
-		
-		if(value > 0) 
-			this.setText(value + "");
+		this.setBorder(Config.RAISED_B);
+		this.setBackground(bgColor);
+		this.setCaretColor(this.getBackground());
 	}
 	
-	/**
-	 * Tags the value currently displayed in this cell. Not really used unless an implementation
-	 * of listeners becomes necessary.
-	 * 
-	 * @param data A 2D array of elements for use in randomly populating the Sudoky grid.
-	 */
-	protected void setValue(int data) {
-		this.value = data;
+	public void setCorrect(boolean flag) {
+		setForeground(flag? Config.CELL_FONT_COLOR_CORRECT: Config.CELL_FONT_COLOR_INCORRECT);
+	}
 		
+	public void setHighlighted(boolean flag) {
+		setBackground(flag? Config.CELL_HIGHLIGHTED_COLOR: bgColor);
 	}
 	
-	/**
-	 * Returns the value currently stored for this cell. Not really used unless an implementation
-	 * of listeners becomes necessary.
-	 * 
-	 */
-	protected int getValue() {
-		return this.value;
+	public void setShaded(boolean flag) {
+		setBackground(flag? Config.CELL_SHADED_COLOR: Config.CELL_REGULAR_COLOR);
+	}
+	
+	public void setHighlightedDynamics(boolean flag) {
+		parentBox.setHighlighted(flag);		
+		parentLines[0].setHighlighted(flag);
+		parentLines[1].setHighlighted(flag);
+	}
+	
+	public void setShadedDynamics(boolean flag) {
+		parentBox.setShaded(flag);
+		parentLines[0].setShaded(flag);
+		parentLines[1].setShaded(flag);
+	}
+	
+	public void setValue(int n) {
+		setText(n==0? "": n + "");
+	}
+
+	public int getLocation(char direction) {
+		return direction=='y'? gridy: gridx;
+	}
+	
+	public int getValue() {
+		return getText().length() > 0? Integer.parseInt(getText()): 0;
+	}
+	
+	public String toString() {
+		return "[" + gridx + "," + gridy + "]";
 	}
 }

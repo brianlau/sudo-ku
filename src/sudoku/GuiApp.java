@@ -8,6 +8,7 @@ package sudoku;
  *
  */
 
+import gui.Config;
 import gui.Window;
 import javax.swing.JFrame;
 
@@ -22,7 +23,7 @@ public class GuiApp {
 		GameGrid numbers = new GameGrid(9);
 		
 		//Create and set up the window.
-        Window window = new Window("Sudoku", numbers.given);
+        Window window = new Window(Config.TITLE, numbers.grid, numbers.given);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Display the window.

@@ -1,20 +1,21 @@
 package gui.element;
 
 @SuppressWarnings("serial")
-public class Box {
-
-	private int x, gridx;
-	private int y, gridy;
-	private int count;
+public class Line {
+	
 	private Cell cells[];
+	private int count = 0;
 	private boolean isShaded;
 	
-	public Box(boolean setShaded) {
-		count = 0;
-		isShaded = setShaded;
+	public Line(boolean setShaded) {
 		cells = new Cell[9];
+		isShaded = setShaded;
 	}
 	
+	public void add(Cell cell) {
+		cells[count] = cell;
+		count++;
+	}
 	public void setHighlighted(boolean flag) {
 		for(Cell cell: cells) cell.setHighlighted(flag);
 	}
@@ -23,16 +24,7 @@ public class Box {
 		for(Cell cell: cells) cell.setShaded(flag);
 	}
 	
-	public void add(Cell cell) {
-		cells[count] = cell;
-		count++;
-	}
-	
 	public boolean isShaded() {
 		return isShaded;
-	}
-	
-	public String toString() {
-		return gridx + ":" + gridy;
 	}
 }

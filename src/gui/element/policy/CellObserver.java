@@ -14,11 +14,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 @SuppressWarnings("serial")
-public class SudokuFieldRestrictor extends PlainDocument {
+public class CellObserver extends PlainDocument {
 	
-	private int max = 1;
+	private final int MAX_FIELD_LENGTH = 1;
     
-	public SudokuFieldRestrictor() {
+	public CellObserver() {
         super();
     }
 	
@@ -26,13 +26,13 @@ public class SudokuFieldRestrictor extends PlainDocument {
 	public void insertString(int offset, String  str, AttributeSet attr) throws BadLocationException {
         
 //    	try {
-	    	if(str == null || !(49<=str.charAt(0) && str.charAt(0)<=57) ) {
+	    	if(str == null || !(49<=str.charAt(0) && str.charAt(0)<=57 && str.charAt(0)!='0') ) {
 	    		return;
 //	        	throw new RestrictionError();
 	        } else {
-		        if ((getLength() + str.length()) <= this.max) {
+		        if ((getLength() + str.length()) <= this.MAX_FIELD_LENGTH) {
 		            	super.insertString(offset, str, attr);
-		        }
+		        } 
 	        }
 //    	} catch(RestrictionError error) {
 //    		

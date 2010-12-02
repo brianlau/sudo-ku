@@ -8,7 +8,7 @@ package gui.element;
  *
  */
 
-import java.awt.*;
+import gui.Config;
 
 @SuppressWarnings("serial")
 public class StaticCell extends Cell {
@@ -21,13 +21,17 @@ public class StaticCell extends Cell {
 	 * @param y The 'Y' location of this cell in the Sudoku grid.
 	 * @param n The number value to initiate this cells text with.
 	 */
-	public StaticCell(int x, int y, int n){
+	public StaticCell(int x, int y, int n, Box box, Line[] lines){
 		this.gridx = x;
 		this.gridy = y;
-		this.value = n;
-		this.color = Color.RED;
+		this.parentBox = box;
+		this.parentLines = lines;
+		this.color = Config.CELL_FONT_COLOR_ASSISTED;
+		
 		this.editable = false;
+		this.focusable= false;
 	
 		initElement();
+		setValue(n);
 	}
 }
