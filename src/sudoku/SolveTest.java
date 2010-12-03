@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+
 public class SolveTest {
 //In order to use Solve.java, the grid to test must have at least one zero
 //else it will just return the difficulty, which default is one.
@@ -21,7 +22,7 @@ assertEquals(0, grid1.solve(9, grid));
 
 /**
  * 
- * @author Walter
+ * author: Walter
  * Creates an instance of the Solve Class.
  * Creates an instance of the GameGrid Class.
  * Uses assertTrue to test to see if the GameGrid Class

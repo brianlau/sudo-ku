@@ -1,7 +1,7 @@
 package gui.element;
 
 /**
-* This class instantiates an editable cell for the Sudoku board.
+ * This class instantiates an editable cell for the Sudoku board.
  * 
  * @author Alvin Moradi with contributions from the "AWESOME SAUCE" team
  * @version 1.0
@@ -22,6 +22,8 @@ public class EditableCell extends Cell {
 	 * 
 	 * @param x The 'X' location of this cell in the Sudoku grid.
 	 * @param y The 'Y' location of this cell in the Sudoku grid.
+	 * @param box 	The imaginary box within which this cell will be located.
+	 * @param lines The imaginary lines that intersect through this cell.
 	 */
 	public EditableCell(int x, int y, Box box, Line[] lines) {
 		this.gridx = x;
@@ -36,15 +38,5 @@ public class EditableCell extends Cell {
 		this.isCorrect	= false;
 		
 		initElement();
-	}
-	
-	public void setSelected(boolean flag) {
-		isSelected = flag;		
-		setBorder(flag? Config.LOWERED_B: Config.RAISED_B);
-	}
-		
-	public void setCorrect(boolean flag) {
-		isCorrect = flag;		
-		setForeground(flag? Config.CELL_FONT_COLOR_CORRECT: Config.CELL_FONT_COLOR_INCORRECT);		
 	}
 }

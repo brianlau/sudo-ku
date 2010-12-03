@@ -1,4 +1,13 @@
 package gui;
+
+/**
+ * The following static class is used to store configuration variables for the puzzle/game.
+ * 
+ * @author Alvin G. Moradi with contributions from team "Awesome Sauce" members.
+ * @version 1.0
+ * 
+ */
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,6 +28,7 @@ public class Config {
         "<HTML>" + 
         "<B>"+NAME+"</B> "+VERSION+"</BR>" + 
         "<P><BR>Author: <FONT COLOR=\"#0000ff\">Team Awesome Sauce</FONT></P>" + 
+        "<P><BR>Members: <FONT COLOR=\"#00aa00\">Walter Trask, Alvin Moradi, Brian Lau, William Agyepong</FONT></P>" + 
         "<P><BR>Web page: <FONT COLOR=\"#0000ff\">http://www.saucyteams.com/cst200goofs.php?nerdlevel=10</FONT></P>" +
         "<P><BR></P>Blooper's License.<BR> " +
         "A copy of this is included with your copy of "+NAME+" and can also be found at<BR> " +
@@ -31,7 +41,7 @@ public class Config {
     public static final Color CELL_FONT_COLOR_INCORRECT = CELL_FONT_COLOR_BASE;
       
     public final static Color CELL_REGULAR_COLOR = new Color(255,255,255);    
-    public final static Color CELL_SHADED_COLOR = new Color(250,230,250);
+    public final static Color CELL_SHADED_COLOR = new Color(250,200,200);
     public static final Color CELL_HIGHLIGHTED_COLOR = new Color(Integer.parseInt( "DEDEDE",16));  
 
     public final static Font FONT_SML = new Font("Tahoma", Font.BOLD, 12);

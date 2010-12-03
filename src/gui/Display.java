@@ -27,24 +27,22 @@ import gui.element.StaticCell;
 public class Display extends JPanel implements FocusListener, ActionListener {
 
 	private JPanel gridPanel; 
-	private JPanel settingsPanel;
+	private JPanel optionsPanel;
 	
 	private Box[][] boxes;
 	private Cell[][] cells;
 	private Line[][] lines;
 	private int[][] allNumbers, assistNumbers;
 	
-	private JButton newButton;
 	private JButton restartButton;
 	private JButton correctButton;
 	private JButton clearButton;
 	private JButton aboutButton;
-	private JSeparator separator;
-	private JSlider levelSlider;
 	
 	/**
 	 * The constructor for calling this grid class.
 	 * 
+	 * @param allNumbers The set of numbers to represent the complete Sudoku grid.
 	 * @param assistNumbers A set of numbers for use with the creation of the Sudoku grid.
 	 */
 	public Display(int[][] allNumbers, int[][] assistNumbers) {
@@ -52,7 +50,7 @@ public class Display extends JPanel implements FocusListener, ActionListener {
 		this.assistNumbers	= assistNumbers;
 		
 		initGrid();
-		initSettings();
+		initOptions();
 	}
 	
 	/**
@@ -68,21 +66,25 @@ public class Display extends JPanel implements FocusListener, ActionListener {
 		this.add(gridPanel);
 	}
 	
-	public void initSettings() {		
-		newButton    = new JButton("New Game");
+	/**
+	 * Initiate miscellaneous components to complete our sudoku game window with an options panel.
+	 */
+	public void initOptions() {		
 		correctButton= new JButton("Correct It!");
 		restartButton= new JButton("Restart");
 		clearButton  = new JButton("Clear Board");
 		aboutButton  = new JButton("About");
 		
-		separator  = new JSeparator();
-		levelSlider= new JSlider(0,100);
+		this.optionsPanel = getOptionsPanel();
 		
-		this.settingsPanel = getSettingsPanel();
-		
-        this.add(settingsPanel);		
+        this.add(optionsPanel);		
 	}
 	
+	/**
+	 * The following returns a reference to an extrapolated panel representing the entire set of grid board cells;
+	 * 
+	 * @return A reference to the cell container panel that encompasses all cells;
+	 */
 	public JPanel getGridPanel() {
 		int bx=-1, by=-1;
 		
@@ -94,6 +96,12 @@ public class Display extends JPanel implements FocusListener, ActionListener {
 		panel.setBorder(Config.EMPTY_B);
         panel.setLayout(layout);
 		
+        //the following algorithm/loop applies static attributes to cells != 0 (meaning assisted REDs)
+        //while passing ownership references according to dynamics needed to remain unique
+        //with respect to applicable cell.
+        //
+        //[bx,by] grow from [0,0] to [2,2] in order to store 3x3 boxes while lines grow to [{x,y}][9], 
+        //i.e. 18 lines total
         for (int x = 0; x < 9; x++) {   
         	
         	if(x%3 == 0) bx++;        	
@@ -103,69 +111,80 @@ public class Display extends JPanel implements FocusListener, ActionListener {
         	for (int y = 0; y < 9; y++) {  
 	        	if(y%3 == 0) by++;   
 	        		        
+	        	//(bx+by) % 2 == 0 >>> Calculates alternate boxes for background shading purposes
 	        	if(boxes[bx][by] == null) boxes[bx][by] = new Box( (bx+by) % 2 == 0 );	        	
 	        	if(lines[1][y] == null) lines[1][y] = new Line(false);
-        		        	
+        		
 	        	cells[x][y] = assistNumbers[x][y] == 0? new EditableCell(x,y, boxes[bx][by], new Line[]{lines[0][x], lines[1][y]}) : new StaticCell(x,y,assistNumbers[x][y], boxes[bx][by], new Line[]{lines[0][x], lines[1][y]});	        			
 	        	cells[x][y].addFocusListener(this);
-	    	        	
+	    	    
+	        	//pass reference to parentBoxes AND parentLines, accordingly
 	        	boxes[bx][by].add(cells[x][y]);
 	        	lines[0][x].add(cells[x][y]);
 	        	lines[1][y].add(cells[x][y]);
 	        	
 	        	panel.add(cells[x][y], c);
 			}
-		}
-        
+		}        
 		return panel;
 	}
 	
-	public JPanel getSettingsPanel() {
+	/**
+	 * This function creates and returns a reference to a panel with miscellaneous option buttons for controlling the game.
+	 * 
+	 * @return The reference to an options panel;
+	 */
+	public JPanel getOptionsPanel() {
 		JPanel panel = new JPanel();		
 		
 		panel.setPreferredSize(new Dimension(260,540));
 		panel.setBackground(Color.lightGray);
 		panel.setBorder(Config.EMPTY_B);
-		
-		levelSlider.setBorder(new TitledBorder(Config.ETCHED_B, "Difficulty"));
-		
-		newButton.addActionListener(this);		
+				
 		correctButton.addActionListener(this);
 		restartButton.addActionListener(this);
 		clearButton.addActionListener(this);
 		aboutButton.addActionListener(this);
 		
-//		panel.add(newButton);
 		panel.add(correctButton);
 		panel.add(restartButton);
 		panel.add(clearButton);
 		panel.add(aboutButton);
-//		panel.add(separator);
-//		panel.add(levelSlider);
 		
 		return panel;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+	 */
 	public void focusGained(FocusEvent fe) {	
 		EditableCell cell = ((EditableCell)fe.getSource());
 
 		cell.setValue(0);
 		cell.setSelected(true);
 		
+		//should the cell boxes AND lines highlight dynamically
 		if(Config.DYNAMIC_HIGHLIGHT)
 			cell.setHighlightedDynamics(true);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+	 */
 	public void focusLost(FocusEvent fe) {	
 		EditableCell cell = ((EditableCell)fe.getSource());
 
 		cell.setSelected(false);
 		cell.setHighlightedDynamics(false);
 		
+		//should the cell boxes AND lines highlight dynamically
 		if(Config.DYNAMIC_CORRECTION)
-			cell.setCorrect(cell.getValue() == allNumbers[cell.getLocation('x')][cell.getLocation('y')]);		
+			cell.setCorrect(cell.getValue() == allNumbers[cell.getLocation('x')][cell.getLocation('y')]);
 	}
 
+	/**
+	 * Used to clear out the entire Sudoku board. Incomplete though additional functionality was not required as per the project.
+	 */
 	public void clearGrid() {
 		for(Cell[] celli: cells) 
 			for(Cell cellj: celli) {
@@ -173,6 +192,9 @@ public class Display extends JPanel implements FocusListener, ActionListener {
 			}
 	}
 	
+	/**
+	 * Used to clear out the entire Sudoku board. Incomplete though additional functionality was not required as per the project.
+	 */
 	public void restartGrid() {
 		for(Cell[] celli: cells) 
 			for(Cell cellj: celli) {
@@ -180,23 +202,11 @@ public class Display extends JPanel implements FocusListener, ActionListener {
 			}
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == newButton) {
-			//Calculate a random grid
-			GameGrid matrix = new GameGrid(9);
-			
-			allNumbers 	  = matrix.grid;
-			assistNumbers = matrix.given;
-	        
-			clearGrid();
-
-			this.cells = new Cell[9][9];
-			this.boxes = new Box[3][3];
-			this.lines = new Line[2][9];
-			
-			this.gridPanel = getGridPanel();
-		}		
+	public void actionPerformed(ActionEvent e) {		
 
 		if(e.getSource() == correctButton) {
 			for(Cell[] celli: cells) 

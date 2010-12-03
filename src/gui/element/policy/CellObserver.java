@@ -16,12 +16,19 @@ import javax.swing.text.PlainDocument;
 @SuppressWarnings("serial")
 public class CellObserver extends PlainDocument {
 	
+	//identifies the longest string allowable in a Cell
 	private final int MAX_FIELD_LENGTH = 1;
     
+	/**
+	 * Constructor for building an object of this class; meant for restricting the text fields inputs.
+	 */
 	public CellObserver() {
         super();
     }
 	
+    /* (non-Javadoc)
+     * @see javax.swing.text.PlainDocument#insertString(int, java.lang.String, javax.swing.text.AttributeSet)
+     */
     @Override
 	public void insertString(int offset, String  str, AttributeSet attr) throws BadLocationException {
         

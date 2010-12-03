@@ -18,8 +18,11 @@ public class Window extends JFrame {
 	public static Display grid;
 	
 	/**
+	 * Constructor for initializing a new window frame within which to display components of this game;
+	 * 
 	 * @param title The title of the Window or application.
-	 * @param data The randomized set of numbers to use for populating the board grid.
+	 * @param allNumbers The randomized set of numbers to use for populating the board grid.
+	 * @param assistedNumbers A random subset of numbers derived from 'allNumbers'
 	 */
 	public Window(String title, int[][] allNumbers, int[][] assistedNumbers) {
 		

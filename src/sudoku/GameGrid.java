@@ -2,6 +2,7 @@ package sudoku;
 
 import java.util.Random;
 
+
 public class GameGrid {
 
 	public int diff;
